@@ -1,0 +1,39 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "feriasjeri-app",
+          "appId": "1:1003092382547:android:e908a499d646527ca187a6",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "feriasjeri-app",
+          "configurations": {
+            "android": "1:1003092382547:android:e908a499d646527ca187a6",
+            "ios": "1:1003092382547:ios:763c780ff49bf004a187a6",
+            "macos": "1:1003092382547:ios:763c780ff49bf004a187a6",
+            "web": "1:1003092382547:web:0968d9ce770a0ce2a187a6",
+            "windows": "1:1003092382547:web:5060e9710c03f46ea187a6"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
