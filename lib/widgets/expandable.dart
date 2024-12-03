@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -69,27 +67,35 @@ class _ExpandableState extends State<Expandable>
 
     containerAnimation = Tween<double>(
             begin: widget.closedHeight ?? 70, end: widget.openedHeight ?? 250)
-        .animate(CurvedAnimation(
-            parent: animationController, curve: widget.curve ?? Curves.ease))
+        .animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: widget.curve ?? Curves.ease,
+      ),
+    )
       ..addListener(() {
         setState(() {});
       })
-      ..addStatusListener((status) {
-        log(status.toString());
-      });
+      ..addStatusListener((status) {});
 
     rotateAnimation =
         Tween<double>(begin: 0, end: math.pi).animate(animationController);
 
     paddingAnimation = Tween<double>(
-            begin: widget.outerClosedPadding ?? 20,
-            end: widget.outerOpenedPadding ?? 10)
-        .animate(CurvedAnimation(
-            parent: animationController,
-            curve: widget.paddingCurve ?? Curves.bounceInOut));
+            begin: widget.outerClosedPadding ?? 12,
+            end: widget.outerOpenedPadding ?? 6)
+        .animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: widget.paddingCurve ?? Curves.bounceInOut,
+      ),
+    );
 
-    fadeAnimation = Tween<double>(begin: 0.0, end: 10.0).animate(
-        CurvedAnimation(parent: animationController, curve: Curves.bounceOut));
+    fadeAnimation =
+        Tween<double>(begin: 0.0, end: 10.0).animate(CurvedAnimation(
+      parent: animationController,
+      curve: Curves.bounceOut,
+    ));
   }
 
   @override
@@ -108,8 +114,13 @@ class _ExpandableState extends State<Expandable>
               ? containerAnimation.value
               : null,
       padding: widget.titlePadding ??
-          const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      margin: EdgeInsets.symmetric(horizontal: paddingAnimation.value),
+          const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 20,
+          ),
+      margin: EdgeInsets.symmetric(
+        horizontal: paddingAnimation.value,
+      ),
       decoration: BoxDecoration(
         color: widget.backgroundcolor ?? Theme.of(context).primaryColor,
         boxShadow: [

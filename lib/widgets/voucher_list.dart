@@ -30,16 +30,16 @@ class VoucherList extends StatelessWidget {
         }
 
         final vouchers = snapshot.data!;
-        return Expanded(
-          child: ListView.builder(
-            itemCount: vouchers.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: VoucherCard(voucher: vouchers[index]),
-              );
-            },
-          ),
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: const ClampingScrollPhysics(),
+          itemCount: vouchers.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: VoucherCard(voucher: vouchers[index]),
+            );
+          },
         );
       },
     );

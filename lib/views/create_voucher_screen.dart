@@ -16,6 +16,8 @@ class CreateVoucherScreen extends StatefulWidget {
 }
 
 class _CreateVoucherScreenState extends State<CreateVoucherScreen> {
+  TimeOfDay initialTime = TimeOfDay.now();
+
   void _showCalendarModal(BuildContext context) async {
     try {
       final formProvider =
@@ -45,8 +47,6 @@ class _CreateVoucherScreenState extends State<CreateVoucherScreen> {
     try {
       final formProvider =
           Provider.of<VoucherFormProvider>(context, listen: false);
-
-      TimeOfDay initialTime = TimeOfDay.now();
 
       final selectedTime = await showFloatingModalBottomSheet<TimeOfDay>(
         context: context,
@@ -94,14 +94,8 @@ class _CreateVoucherScreenState extends State<CreateVoucherScreen> {
               String formattedEndDate =
                   DateFormat('dd/MM/yyyy').format(formProvider.endDate);
 
-              String formattedTime = formProvider.timeController.text.isNotEmpty
-                  ? formProvider.timeController.text
-                  : 'Horário';
-
-              String formattedTotal =
-                  formProvider.totalValueController.text.isNotEmpty
-                      ? formProvider.totalValueController.text
-                      : 'Total';
+              String formattedTime =
+                  '${initialTime.hour.toString().padLeft(2, '0')}:${initialTime.minute.toString().padLeft(2, '0')}';
 
               return Scaffold(
                 body: AnimatedScreen(
@@ -127,53 +121,9 @@ class _CreateVoucherScreenState extends State<CreateVoucherScreen> {
                                     child: CustomClickableTile(
                                       onTap: () => _showCalendarModal(context),
                                       prefixIcon: Icons.calendar_today,
-                                      text: formattedStartDate,
+                                      text:
+                                          '$formattedStartDate - $formattedEndDate',
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  const Text('-'),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: CustomClickableTile(
-                                      onTap: () => _showCalendarModal(context),
-                                      prefixIcon: Icons.calendar_today,
-                                      text: formattedEndDate,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            ListTile(
-                              title: CustomInputField(
-                                  controller: formProvider.nameController,
-                                  label: 'Nome',
-                                  prefixIcon: Icons.person,
-                                  errorText: formProvider.nameError),
-                            ),
-                            ListTile(
-                              title: CustomInputField(
-                                  controller: formProvider.phoneController,
-                                  label: 'Telefone',
-                                  keyboardType: TextInputType.phone,
-                                  prefixIcon: Icons.phone,
-                                  errorText: formProvider.phoneError),
-                            ),
-                            ListTile(
-                              title: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: CustomInputField(
-                                        controller:
-                                            formProvider.boardingController,
-                                        label: 'Embarque',
-                                        prefixIcon: Icons.place,
-                                        errorText: formProvider.boardingError),
                                   ),
                                   const SizedBox(
                                     width: 5,
@@ -191,16 +141,52 @@ class _CreateVoucherScreenState extends State<CreateVoucherScreen> {
                               ),
                             ),
                             ListTile(
+                              title: CustomInputField(
+                                controller: formProvider.nameController,
+                                label: 'Nome',
+                                prefixIcon: Icons.person,
+                                errorText: formProvider.nameError,
+                              ),
+                            ),
+                            ListTile(
+                              title: CustomInputField(
+                                controller: formProvider.phoneController,
+                                label: 'Telefone',
+                                keyboardType: TextInputType.phone,
+                                prefixIcon: Icons.phone,
+                                errorText: formProvider.phoneError,
+                              ),
+                            ),
+                            ListTile(
+                              title: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: CustomInputField(
+                                      controller:
+                                          formProvider.boardingController,
+                                      label: 'Embarque',
+                                      prefixIcon: Icons.place,
+                                      errorText: formProvider.boardingError,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            ListTile(
                               title: Row(
                                 children: [
                                   Expanded(
                                     child: CustomInputField(
-                                        controller:
-                                            formProvider.adultController,
-                                        label: 'Adultos',
-                                        prefixIcon: Icons.group,
-                                        keyboardType: TextInputType.number,
-                                        errorText: formProvider.adultError),
+                                      controller: formProvider.adultController,
+                                      label: 'Adultos',
+                                      prefixIcon: Icons.group,
+                                      keyboardType: TextInputType.number,
+                                      errorText: formProvider.adultError,
+                                    ),
                                   ),
                                   const SizedBox(
                                     width: 5,
@@ -221,14 +207,16 @@ class _CreateVoucherScreenState extends State<CreateVoucherScreen> {
                                 children: [
                                   Expanded(
                                     child: CustomInputField(
-                                        controller:
-                                            formProvider.partialValueController,
-                                        label: 'Parcial',
-                                        prefixIcon: Icons.attach_money,
-                                        keyboardType: const TextInputType
-                                            .numberWithOptions(decimal: true),
-                                        errorText:
-                                            formProvider.partialValueError),
+                                      controller:
+                                          formProvider.partialValueController,
+                                      label: 'Valor Pago',
+                                      prefixIcon: Icons.attach_money,
+                                      keyboardType:
+                                          const TextInputType.numberWithOptions(
+                                        decimal: true,
+                                      ),
+                                      errorText: formProvider.partialValueError,
+                                    ),
                                   ),
                                   const SizedBox(
                                     width: 5,
@@ -241,22 +229,11 @@ class _CreateVoucherScreenState extends State<CreateVoucherScreen> {
                                     child: CustomInputField(
                                       controller:
                                           formProvider.boardingValueController,
-                                      label: 'Embarque',
+                                      label: 'Valor Embarque',
                                       keyboardType:
                                           const TextInputType.numberWithOptions(
-                                              decimal: true),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  const Text('='),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Expanded(
-                                    child: CustomClickableTile(
-                                      text: formattedTotal,
+                                        decimal: true,
+                                      ),
                                     ),
                                   ),
                                 ],

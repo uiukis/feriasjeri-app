@@ -52,7 +52,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Bem-vindo!')),
-      body: VoucherList(isAdmin: isAdmin),
+      body: Column(
+        children: [
+          Expanded(
+            child: VoucherList(isAdmin: isAdmin),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: _openSlidingModal,
         child: const Icon(Icons.add),
