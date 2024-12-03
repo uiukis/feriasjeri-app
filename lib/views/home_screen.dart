@@ -1,13 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:feriasjeri_app/services/voucher_service.dart';
 import 'package:feriasjeri_app/utils/check_admin.dart';
 import 'package:feriasjeri_app/views/login_screen.dart';
-import 'package:feriasjeri_app/views/voucher_screen.dart';
-import 'package:feriasjeri_app/widgets/floating_modal.dart';
-import 'package:feriasjeri_app/widgets/voucher_card.dart';
+import 'package:feriasjeri_app/views/create_voucher_screen.dart';
+import 'package:feriasjeri_app/widgets/bar_bottom_sheet.dart';
+import 'package:feriasjeri_app/widgets/voucher_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../models/voucher.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,7 +14,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final VoucherService _voucherService = VoucherService();
   bool isAdmin = false;
 
   Future<void> _logout() async {
@@ -31,18 +27,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _openSlidingModal() {
-    showFloatingModalBottomSheet(
+    showBarModalBottomSheet(
       context: context,
       builder: (context) {
-        return const VoucherScreen();
+        return const CreateVoucherScreen();
       },
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _checkIfAdmin();
   }
 
   Future<void> _checkIfAdmin() async {
@@ -53,31 +43,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _checkIfAdmin();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Bem-vindo!')),
-      body: StreamBuilder<List<Voucher>>(
-        stream: _voucherService.fetchVouchers(isAdmin),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasError) {
-            return Center(child: Text('Erro: ${snapshot.error}'));
-          }
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Nenhum voucher encontrado.'));
-          }
-
-          final vouchers = snapshot.data!;
-          return ListView.builder(
-            itemCount: vouchers.length,
-            itemBuilder: (context, index) {
-              return VoucherCard(voucher: vouchers[index]);
-            },
-          );
-        },
-      ),
+      body: VoucherList(isAdmin: isAdmin),
       floatingActionButton: FloatingActionButton(
         onPressed: _openSlidingModal,
         child: const Icon(Icons.add),

@@ -27,14 +27,27 @@ Future<T> showFloatingModalBottomSheet<T>({
   required BuildContext context,
   required WidgetBuilder builder,
   Color? backgroundColor,
+  Offset? slideDirection = const Offset(0, 1),
 }) async {
   final result = await showCustomModalBottomSheet(
-      context: context,
-      builder: builder,
-      containerWidget: (_, animation, child) => FloatingModal(
-            child: child,
-          ),
-      expand: false);
+    context: context,
+    builder: builder,
+    containerWidget: (_, animation, child) {
+      final slideAnimation = Tween<Offset>(
+        begin: slideDirection ?? const Offset(0, 1),
+        end: Offset.zero,
+      ).animate(CurvedAnimation(parent: animation, curve: Curves.easeInOut));
+
+      return SlideTransition(
+        position: slideAnimation,
+        child: FloatingModal(
+          backgroundColor: backgroundColor,
+          child: child,
+        ),
+      );
+    },
+    expand: false,
+  );
 
   return result;
 }

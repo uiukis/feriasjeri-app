@@ -4,17 +4,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class VoucherService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final userId = FirebaseAuth.instance.currentUser?.uid;
 
   Future<void> saveVoucher(Voucher voucher) async {
     try {
-      await _firestore.collection('vouchers').add(voucher.toJson());
+      if (userId != null) {
+        await _firestore.collection('vouchers').add({
+          ...voucher.toJson(),
+          'userId': userId,
+        });
+      } else {
+        throw Exception('Usuário não autenticado');
+      }
     } catch (e) {
       throw Exception('Erro ao salvar voucher: $e');
     }
   }
 
   Stream<List<Voucher>> fetchVouchers(bool isAdmin) {
-    final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId != null) {
       return _firestore
           .collection('vouchers')
