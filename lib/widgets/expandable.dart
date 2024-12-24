@@ -50,7 +50,6 @@ class _ExpandableState extends State<Expandable>
   late AnimationController animationController;
   late Animation<double> containerAnimation;
   late Animation<double> rotateAnimation;
-  late Animation paddingAnimation;
   late Animation<double> fadeAnimation;
   bool isLoading = false;
 
@@ -81,16 +80,6 @@ class _ExpandableState extends State<Expandable>
     rotateAnimation =
         Tween<double>(begin: 0, end: math.pi).animate(animationController);
 
-    paddingAnimation = Tween<double>(
-            begin: widget.outerClosedPadding ?? 12,
-            end: widget.outerOpenedPadding ?? 6)
-        .animate(
-      CurvedAnimation(
-        parent: animationController,
-        curve: widget.paddingCurve ?? Curves.bounceInOut,
-      ),
-    );
-
     fadeAnimation =
         Tween<double>(begin: 0.0, end: 10.0).animate(CurvedAnimation(
       parent: animationController,
@@ -118,8 +107,8 @@ class _ExpandableState extends State<Expandable>
             horizontal: 20,
             vertical: 20,
           ),
-      margin: EdgeInsets.symmetric(
-        horizontal: paddingAnimation.value,
+      margin: const EdgeInsets.symmetric(
+        horizontal: 6,
       ),
       decoration: BoxDecoration(
         color: widget.backgroundcolor ?? Theme.of(context).primaryColor,

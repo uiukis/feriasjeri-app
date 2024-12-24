@@ -1,3 +1,4 @@
+import 'package:feriasjeri_app/views/voucher_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:feriasjeri_app/models/voucher.dart';
 import 'expandable.dart';
@@ -26,6 +27,15 @@ class VoucherCardState extends State<VoucherCard> {
       return 320;
     }
     return 300;
+  }
+
+  void navigateToVoucherScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VoucherScreen(voucher: widget.voucher),
+      ),
+    );
   }
 
   @override
@@ -207,8 +217,10 @@ class VoucherCardState extends State<VoucherCard> {
               height: 8,
             ),
             FloatingActionButton.extended(
-              label: const Text("Gerar voucher"),
-              onPressed: () => {},
+              heroTag:
+                  '${widget.voucher.tour}_${widget.voucher.startDate}_${widget.voucher.endDate}',
+              label: const Text("Visualizar voucher"),
+              onPressed: () => navigateToVoucherScreen(context),
             )
           ],
         ),
