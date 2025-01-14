@@ -1,5 +1,5 @@
 name: feriasjeri_app
-description: "Férias Jeri"
+description: "Aplicativo oficial da Férias Jeri"
 publish_to: "https://feriasjeri.web.app/"
 
 version: 1.0.0+1 # Versão do app no formato major.minor.patch+build_number
@@ -27,6 +27,11 @@ dependencies:
   provider: ^6.1.2 # Gerenciamento de estado baseado em InheritedWidget
   modal_bottom_sheet: ^3.0.0 # Modal customizável para bottom sheets
   calendar_date_picker2: ^1.1.7 # Picker de datas personalizável
+
+  # PDF
+  pdf: ^3.11.0
+  path_provider: ^2.0.15
+  share_plus: ^6.3.0
 
   # Internacionalização e formatação
   intl: ^0.19.0 # Para formatação de datas, números e strings localizadas

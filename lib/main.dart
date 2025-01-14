@@ -1,3 +1,4 @@
+import 'package:feriasjeri_app/providers/pdf_provider.dart';
 import 'package:feriasjeri_app/providers/voucher_form_provider.dart';
 import 'package:feriasjeri_app/views/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +14,12 @@ void main() async {
   );
 
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => VoucherFormProvider(),
+    
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => VoucherFormProvider()),
+        ChangeNotifierProvider(create: (_) => PdfProvider()),
+      ],
       child: const MyApp(),
     ),
   );
