@@ -2,6 +2,7 @@ import 'package:feriasjeri_app/views/create_voucher_screen.dart';
 import 'package:feriasjeri_app/views/login_screen.dart';
 import 'package:feriasjeri_app/widgets/bar_bottom_sheet.dart';
 import 'package:feriasjeri_app/widgets/custom_icon_button.dart';
+import 'package:feriasjeri_app/widgets/advanced_expandable_card.dart';
 import 'package:feriasjeri_app/widgets/voucher_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +15,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool isAdmin = false;
-  double modalHeight = 0.75;
-  double voucherListOffset = -20;
+  Color _appBarColor = Colors.transparent;
+  BorderRadiusGeometry _modalBorderRadius = const BorderRadius.vertical(
+    top: Radius.circular(16),
+  );
+  double _zoomFactor = 1;
 
   Future<void> _logout() async {
     await FirebaseAuth.instance.signOut();
@@ -37,35 +40,46 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _onVerticalDragUpdate(DragUpdateDetails details) {
+  void _updateOffset(double offset) {
+    double maxOffset = 25;
+    double progress = (offset / maxOffset).clamp(0.0, 1.0);
     setState(() {
-      modalHeight -= details.primaryDelta! / MediaQuery.of(context).size.height;
-      modalHeight = modalHeight.clamp(0.4, 1);
-
-      voucherListOffset = modalHeight > 0.75 ? 0 : -20;
+      _appBarColor = Color.lerp(
+        Colors.transparent,
+        Colors.grey.shade300,
+        progress,
+      )!;
+      _zoomFactor = 1 + (progress * 0.1);
     });
-  }
 
-  void _onVerticalDragEnd(DragEndDetails details) {
-    setState(() {
-      if (modalHeight > 0.75) {
-        modalHeight = 1;
-        voucherListOffset = 0;
-      } else {
-        modalHeight = 0.75;
-        voucherListOffset = -20;
-      }
-    });
+    if (offset > 10 && _modalBorderRadius != BorderRadius.zero) {
+      setState(() {
+        _modalBorderRadius = BorderRadius.zero;
+      });
+    } else if (offset <= 10 &&
+        _modalBorderRadius !=
+            const BorderRadius.vertical(top: Radius.circular(16))) {
+      setState(() {
+        _modalBorderRadius = const BorderRadius.vertical(
+          top: Radius.circular(16),
+        );
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final appBarHeight = 80 + mediaQuery.padding.top;
+    final maxModalHeightFactor =
+        (mediaQuery.size.height - appBarHeight) / mediaQuery.size.height;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: _appBarColor,
         elevation: 0,
-        toolbarHeight: 80,
+        surfaceTintColor: Colors.transparent,
+        toolbarHeight: appBarHeight,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -75,7 +89,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 Scaffold.of(context).openDrawer();
               },
             ),
-            const SizedBox.shrink(),
+            const Text(
+              'Vouchers',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
             CustomIconButton(
               icon: Icons.search,
               onPressed: () {},
@@ -86,87 +107,43 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         children: [
           Positioned.fill(
-            child: ClipRect(
-              child: Align(
-                alignment: Alignment.topCenter,
-                heightFactor: 0.6,
-                child: AnimatedScale(
-                  scale: 1 + (modalHeight - 0.65) * 0.2,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  child: Image.asset(
-                    'assets/images/background.jpg',
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.25,
-                  ),
+            child: Align(
+              alignment: Alignment.topCenter,
+              heightFactor: 0.6,
+              child: AnimatedScale(
+                scale: _zoomFactor,
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeInOut,
+                child: Image.asset(
+                  'assets/images/background.jpg',
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height * 0.25,
                 ),
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: GestureDetector(
-              onVerticalDragUpdate: _onVerticalDragUpdate,
-              onVerticalDragEnd: _onVerticalDragEnd,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-                height: MediaQuery.of(context).size.height * modalHeight,
-                width: double.infinity,
+          DraggableScrollableSheet(
+            initialChildSize: 0.75,
+            minChildSize: 0.75,
+            maxChildSize: maxModalHeightFactor,
+            builder: (context, scrollController) {
+              scrollController.addListener(() {
+                // debugPrint("Scroll offset: ${scrollController.offset}");
+                _updateOffset(scrollController.offset);
+              });
+
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
                 decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(modalHeight == 1 ? 0 : 20),
-                    topRight: Radius.circular(modalHeight == 1 ? 0 : 20),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.5),
-                      blurRadius: 10,
-                      spreadRadius: 5,
-                      offset: const Offset(0, -20),
-                    ),
-                  ],
+                  color: Colors.grey.shade300,
+                  borderRadius: _modalBorderRadius,
                 ),
-                child: Stack(
-                  children: [
-                    AnimatedAlign(
-                      duration:
-                          Duration(milliseconds: modalHeight == 1 ? 300 : 600),
-                      alignment: modalHeight == 1
-                          ? Alignment.topCenter
-                          : Alignment.topLeft,
-                      child: Padding(
-                        padding: modalHeight == 1
-                            ? const EdgeInsets.only(top: 25)
-                            : const EdgeInsets.only(top: 15, left: 20),
-                        child: AnimatedDefaultTextStyle(
-                          duration: const Duration(milliseconds: 800),
-                          curve: Curves.easeInOut,
-                          style: TextStyle(
-                            fontSize: modalHeight == 1 ? 20 : 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                          child: const Text(
-                            'Vouchers',
-                          ),
-                        ),
-                      ),
-                    ),
-                    AnimatedPositioned(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                      top: voucherListOffset,
-                      left: 0,
-                      right: 0,
-                      child: const VoucherList(),
-                    ),
-                  ],
+                child: VoucherList(
+                  scrollController: scrollController,
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ],
       ),

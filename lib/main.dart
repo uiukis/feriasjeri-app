@@ -12,9 +12,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
+  // await VoucherUtils.generateSampleVouchers();
   runApp(
-    
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => VoucherFormProvider()),

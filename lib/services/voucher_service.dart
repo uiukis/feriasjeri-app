@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feriasjeri_app/models/voucher.dart';
+import 'package:feriasjeri_app/services/user_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class VoucherService {
@@ -21,22 +22,31 @@ class VoucherService {
     }
   }
 
-  Stream<List<Voucher>> fetchVouchers(bool isAdmin) {
-    if (userId != null) {
-      return _firestore
+  Future<List<Voucher>> fetchVouchers() async {
+    final UserService userService = UserService();
+
+    bool isAdmin = await userService.checkUserAdmin();
+
+    if (isAdmin) {
+      final snapshot = await _firestore
           .collection('vouchers')
-          .where(
-            'userId',
-            isEqualTo: isAdmin ? null : FirebaseAuth.instance.currentUser?.uid,
-          )
-          .snapshots()
-          .map((snapshot) {
+          .where('userId', isEqualTo: null)
+          .get();
+
+      return snapshot.docs.map((doc) => Voucher.fromJson(doc.data())).toList();
+    } else {
+      if (userId != null) {
+        final snapshot = await _firestore
+            .collection('vouchers')
+            .where('userId', isEqualTo: userId)
+            .get();
+
         return snapshot.docs
             .map((doc) => Voucher.fromJson(doc.data()))
             .toList();
-      });
-    } else {
-      throw Exception('Usuário não autenticado');
+      } else {
+        throw Exception('Usuário não autenticado');
+      }
     }
   }
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CustomIconButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback onPressed;
-  final Color backgroundColor;
+  final Color? backgroundColor;
   final Color iconColor;
   final double borderRadius;
   final double padding;
@@ -12,7 +12,7 @@ class CustomIconButton extends StatelessWidget {
     super.key,
     required this.icon,
     required this.onPressed,
-    this.backgroundColor = const Color.fromARGB(255, 238, 238, 238),
+    this.backgroundColor,
     this.iconColor = Colors.black,
     this.borderRadius = 10.0,
     this.padding = 8.0,
@@ -24,7 +24,7 @@ class CustomIconButton extends StatelessWidget {
       onPressed: onPressed,
       icon: Container(
         decoration: BoxDecoration(
-          color: backgroundColor,
+          color: backgroundColor ?? Colors.grey.shade300,
           borderRadius: BorderRadius.all(
             Radius.circular(borderRadius),
           ),
