@@ -8,7 +8,14 @@ import 'package:intl/intl.dart';
 class VoucherList extends StatefulWidget {
   final ScrollController scrollController;
 
-  const VoucherList({super.key, required this.scrollController});
+  final String searchQuery;
+
+  const VoucherList({
+    super.key,
+    required this.scrollController,
+    this.searchQuery = "",
+  });
+
   @override
   State<VoucherList> createState() => _VoucherListState();
 }
@@ -76,13 +83,23 @@ class _VoucherListState extends State<VoucherList>
           initializeAnimationControllers(vouchers.length);
         }
 
+        final filteredVouchers = vouchers.where((voucher) {
+          final query = widget.searchQuery.toLowerCase();
+          return voucher.tour.toLowerCase().contains(query) ||
+              voucher.time.toLowerCase().contains(query);
+        }).toList();
+
+        if (filteredVouchers.isEmpty) {
+          return const Center(child: Text('Nenhum voucher encontrado.'));
+        }
+
         return ListView.builder(
           controller: widget.scrollController,
           physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-          itemCount: vouchers.length,
+          itemCount: filteredVouchers.length,
           itemBuilder: (context, index) {
-            final voucher = vouchers[index];
+            final voucher = filteredVouchers[index];
             final animation =
                 Tween<Offset>(begin: const Offset(-1.0, 0), end: Offset.zero)
                     .animate(
