@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:feriasjeri_app/models/voucher.dart';
-import 'package:feriasjeri_app/services/user_service.dart';
+import 'package:feriasjeri_app/data/models/voucher.dart';
+import 'package:feriasjeri_app/data/repositories/services/user_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class VoucherService {

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:feriasjeri_app/utils/validators.dart';
-import 'package:feriasjeri_app/views/home_screen.dart';
+import 'package:feriasjeri_app/core/utils/validators.dart';
+import 'package:feriasjeri_app/presentation/views/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -86,7 +86,7 @@ class LoginScreen extends StatelessWidget {
       ),
       onSubmitAnimationCompleted: () {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          MaterialPageRoute(builder: (context) => HomeScreen()),
         );
       },
     );

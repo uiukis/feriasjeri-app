@@ -42,8 +42,9 @@ class BarBottomSheet extends StatelessWidget {
                     height: 6,
                     width: 40,
                     decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6)),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
                   ),
             ),
             const SizedBox(height: 8),
@@ -55,8 +56,9 @@ class BarBottomSheet extends StatelessWidget {
                     const RoundedRectangleBorder(
                       side: BorderSide(),
                       borderRadius: BorderRadius.only(
-                          topLeft: kDefaultBarTopRadius,
-                          topRight: kDefaultBarTopRadius),
+                        topLeft: kDefaultBarTopRadius,
+                        topRight: kDefaultBarTopRadius,
+                      ),
                     ),
                 clipBehavior: clipBehavior ?? Clip.hardEdge,
                 color: backgroundColor ?? Colors.white,
@@ -64,7 +66,10 @@ class BarBottomSheet extends StatelessWidget {
                 child: SizedBox(
                   width: double.infinity,
                   child: MediaQuery.removePadding(
-                      context: context, removeTop: true, child: child),
+                    context: context,
+                    removeTop: true,
+                    child: child,
+                  ),
                 ),
               ),
             ),

@@ -1,124 +1,61 @@
-import 'package:feriasjeri_app/views/voucher_screen.dart';
-import 'package:feriasjeri_app/widgets/expandable_card.dart';
+import 'package:feriasjeri_app/controllers/voucher_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:feriasjeri_app/models/voucher.dart';
-import 'package:feriasjeri_app/services/voucher_service.dart';
+import 'package:get/get.dart';
+import 'package:feriasjeri_app/data/models/voucher.dart';
+import 'package:feriasjeri_app/presentation/shared/components/expandable_card.dart';
+import 'package:feriasjeri_app/presentation/views/voucher/voucher_screen.dart';
 import 'package:intl/intl.dart';
 
-class VoucherList extends StatefulWidget {
+class VoucherList extends StatelessWidget {
   final ScrollController scrollController;
-
-  final String searchQuery;
 
   const VoucherList({
     super.key,
     required this.scrollController,
-    this.searchQuery = "",
   });
 
   @override
-  State<VoucherList> createState() => _VoucherListState();
-}
-
-class _VoucherListState extends State<VoucherList>
-    with TickerProviderStateMixin {
-  late Future<List<Voucher>> voucher;
-  final VoucherService voucherService = VoucherService();
-  late List<AnimationController> animationControllers;
-
-  void initializeAnimationControllers(int length) {
-    animationControllers = List.generate(
-      length,
-      (index) {
-        final controller = AnimationController(
-          duration: const Duration(milliseconds: 500),
-          vsync: this,
-        );
-
-        Future.delayed(Duration(milliseconds: 100 * index), () {
-          controller.forward();
-        });
-
-        return controller;
-      },
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    voucher = voucherService.fetchVouchers();
-    animationControllers = [];
-  }
-
-  @override
-  void dispose() {
-    for (var controller in animationControllers) {
-      controller.dispose();
-    }
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Voucher>>(
-      future: voucher,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    final VoucherController controller = Get.put(VoucherController());
 
-        if (snapshot.hasError) {
-          return Center(
-              child: Text('Erro ao carregar vouchers: ${snapshot.error}'));
-        }
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
 
-        if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('Nenhum voucher disponível.'));
-        }
+      if (controller.vouchers.isEmpty) {
+        return const Center(child: Text('Nenhum voucher disponível.'));
+      }
 
-        final vouchers = snapshot.data!;
+      if (controller.filteredVouchers.isEmpty) {
+        return const Center(child: Text('Nenhum voucher encontrado.'));
+      }
 
-        if (animationControllers.isEmpty) {
-          initializeAnimationControllers(vouchers.length);
-        }
+      return ListView.builder(
+        controller: scrollController,
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+        itemCount: controller.filteredVouchers.length,
+        itemBuilder: (context, index) {
+          final voucher = controller.filteredVouchers[index];
 
-        final filteredVouchers = vouchers.where((voucher) {
-          final query = widget.searchQuery.toLowerCase();
-          return voucher.tour.toLowerCase().contains(query) ||
-              voucher.time.toLowerCase().contains(query);
-        }).toList();
+          final animation = Tween<Offset>(
+            begin: const Offset(-1.0, 0),
+            end: Offset.zero,
+          ).animate(
+            CurvedAnimation(
+              parent: controller.animationControllers[index].value,
+              curve: Curves.easeInOut,
+            ),
+          );
 
-        if (filteredVouchers.isEmpty) {
-          return const Center(child: Text('Nenhum voucher encontrado.'));
-        }
-
-        return ListView.builder(
-          controller: widget.scrollController,
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-          itemCount: filteredVouchers.length,
-          itemBuilder: (context, index) {
-            final voucher = filteredVouchers[index];
-            final animation =
-                Tween<Offset>(begin: const Offset(-1.0, 0), end: Offset.zero)
-                    .animate(
-              CurvedAnimation(
-                parent: animationControllers[index],
-                curve: Curves.easeInOut,
-              ),
-            );
-
-            return SlideTransition(
-              position: animation,
-              child: _VoucherCard(
-                voucher: voucher,
-              ),
-            );
-          },
-        );
-      },
-    );
+          return SlideTransition(
+            position: animation,
+            child: _VoucherCard(voucher: voucher),
+          );
+        },
+      );
+    });
   }
 }
 
@@ -181,12 +118,10 @@ class _VoucherCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final startDate = DateFormat('dd/MM/yyyy').format(
-      voucher.startDate.toDate(),
-    );
-    final endDate = DateFormat('dd/MM/yyyy').format(
-      voucher.endDate.toDate(),
-    );
+    final startDate =
+        DateFormat('dd/MM/yyyy').format(voucher.startDate.toDate());
+    final endDate = DateFormat('dd/MM/yyyy').format(voucher.endDate.toDate());
+
     return ExpandableCard(
       openedHeight: getOpenedHeight(),
       closedHeight: 100,

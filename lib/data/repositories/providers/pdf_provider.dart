@@ -1,6 +1,6 @@
-import 'package:feriasjeri_app/models/voucher.dart';
+import 'package:feriasjeri_app/data/models/voucher.dart';
 import 'package:flutter/material.dart';
-import 'package:feriasjeri_app/services/pdf_service.dart';
+import 'package:feriasjeri_app/data/repositories/services/pdf_service.dart';
 
 class PdfProvider extends ChangeNotifier {
   final PdfService _pdfService = PdfService();

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:feriasjeri_app/models/voucher.dart';
+import 'package:feriasjeri_app/data/models/voucher.dart';
 import 'package:flutter/material.dart';
 
 class VoucherUtils {

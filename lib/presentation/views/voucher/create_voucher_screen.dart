@@ -1,9 +1,9 @@
-import 'package:feriasjeri_app/providers/voucher_form_provider.dart';
-import 'package:feriasjeri_app/widgets/animated_screen.dart';
-import 'package:feriasjeri_app/widgets/custom_date_picker_dialog.dart';
-import 'package:feriasjeri_app/widgets/custom_clickable_tile.dart';
-import 'package:feriasjeri_app/widgets/custom_input_field.dart';
-import 'package:feriasjeri_app/widgets/floating_modal.dart';
+import 'package:feriasjeri_app/data/repositories/providers/voucher_form_provider.dart';
+import 'package:feriasjeri_app/presentation/shared/components/animated_screen.dart';
+import 'package:feriasjeri_app/presentation/shared/components/custom_date_picker_dialog.dart';
+import 'package:feriasjeri_app/presentation/shared/components/custom_clickable_tile.dart';
+import 'package:feriasjeri_app/presentation/shared/components/custom_input_field.dart';
+import 'package:feriasjeri_app/presentation/shared/components/floating_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';

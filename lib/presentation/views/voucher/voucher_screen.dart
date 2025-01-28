@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:feriasjeri_app/widgets/custom_icon_button.dart';
-import 'package:feriasjeri_app/widgets/voucher_widget.dart';
-import 'package:feriasjeri_app/models/voucher.dart';
+import 'package:feriasjeri_app/presentation/shared/components/custom_icon_button.dart';
+import 'package:feriasjeri_app/presentation/views/voucher/widgets/voucher_widget.dart';
+import 'package:feriasjeri_app/data/models/voucher.dart';
 import 'package:provider/provider.dart';
-import 'package:feriasjeri_app/providers/pdf_provider.dart';
+import 'package:feriasjeri_app/data/repositories/providers/pdf_provider.dart';
 
 class VoucherScreen extends StatelessWidget {
   final Voucher voucher;

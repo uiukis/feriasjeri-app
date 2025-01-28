@@ -1,14 +1,16 @@
-import 'package:feriasjeri_app/providers/pdf_provider.dart';
-import 'package:feriasjeri_app/providers/voucher_form_provider.dart';
-import 'package:feriasjeri_app/views/splash_screen.dart';
+import 'package:feriasjeri_app/data/repositories/providers/pdf_provider.dart';
+import 'package:feriasjeri_app/data/repositories/providers/voucher_form_provider.dart';
+import 'package:feriasjeri_app/presentation/views/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'firebase_options.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -43,6 +45,10 @@ class MyApp extends StatelessWidget {
           seedColor: Colors.blue,
           brightness: Brightness.light,
         ),
+        textTheme: const TextTheme(
+            // : TextStyle(color: AppColors.textPrimary),
+            // : TextStyle(color: AppColors.textSecondary),
+            ),
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,

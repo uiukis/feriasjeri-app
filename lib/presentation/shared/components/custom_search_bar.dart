@@ -1,4 +1,4 @@
-import 'package:feriasjeri_app/widgets/custom_icon_button.dart';
+import 'package:feriasjeri_app/presentation/shared/components/custom_icon_button.dart';
 import 'package:flutter/material.dart';
 
 class CustomSearchBar extends StatefulWidget {
@@ -83,6 +83,7 @@ class _CustomSearchBarState extends State<CustomSearchBar>
                             child: TextField(
                               controller: _searchController,
                               onChanged: widget.onSearch,
+                              autofocus: _isSearching,
                               decoration: InputDecoration(
                                 hintText: widget.hintText,
                                 border: InputBorder.none,

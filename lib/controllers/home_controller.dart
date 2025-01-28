@@ -1,48 +1,64 @@
-import 'package:feriasjeri_app/utils/check_admin.dart';
-import 'package:feriasjeri_app/views/create_voucher_screen.dart';
-import 'package:feriasjeri_app/views/login_screen.dart';
-import 'package:feriasjeri_app/widgets/bar_bottom_sheet.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:feriasjeri_app/controllers/voucher_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
-  var isAdmin = false.obs;
-  var modalHeight = 0.75.obs;
-  var voucherListOffset = (-20).obs;
+  final advancedDrawerController = AdvancedDrawerController();
+  final appBarColor = Colors.transparent.obs;
+  final modalBorderRadius = Rx<BorderRadiusGeometry>(
+    const BorderRadius.vertical(top: Radius.circular(16)),
+  );
+  final zoomFactor = 1.0.obs;
+  final searchQuery = ''.obs;
+  final isSearchBarExpanded = false.obs;
 
-  Future<void> checkAdminStatus() async {
-    final adminStatus = await checkAdmin();
-    isAdmin.value = adminStatus;
+  void handleMenuButtonPressed() {
+    advancedDrawerController.showDrawer();
   }
 
-  void onVerticalDragUpdate(DragUpdateDetails details) {
-    modalHeight.value -= details.primaryDelta! / Get.mediaQuery.size.height;
-    modalHeight.value = modalHeight.value.clamp(0.4, 1);
-    voucherListOffset.value = modalHeight.value > 0.75 ? 0 : -20;
-  }
+  void updateOffset(double offset) {
+    const maxOffset = 250;
+    final progress = (offset / maxOffset).clamp(0.0, 1.0);
 
-  void onVerticalDragEnd(DragEndDetails details) {
-    if (modalHeight.value > 0.75) {
-      modalHeight.value = 1;
-      voucherListOffset.value = 0;
+    if (progress == 0.0) {
+      appBarColor.value = Colors.transparent;
+    } else if (progress == 1.0) {
+      appBarColor.value = Colors.grey.shade300;
     } else {
-      modalHeight.value = 0.75;
-      voucherListOffset.value = -20;
+      appBarColor.value = Color.lerp(
+        Colors.transparent,
+        Colors.grey.shade300,
+        progress,
+      )!;
+    }
+
+    zoomFactor.value = 1 + (progress * 0.1);
+
+    if (offset > 10 && modalBorderRadius.value != BorderRadius.zero) {
+      modalBorderRadius.value = BorderRadius.zero;
+    } else if (offset <= 10 &&
+        modalBorderRadius.value !=
+            const BorderRadius.vertical(top: Radius.circular(16))) {
+      modalBorderRadius.value = const BorderRadius.vertical(
+        top: Radius.circular(16),
+      );
     }
   }
 
-  Future<void> logout() async {
-    await FirebaseAuth.instance.signOut();
-    Get.offAll(() => const LoginScreen());
+  void handleSearchBarExpand(bool isExpanded) {
+    if (!isExpanded) {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (Get.isRegistered<HomeController>()) {
+          isSearchBarExpanded.value = isExpanded;
+        }
+      });
+    } else {
+      isSearchBarExpanded.value = isExpanded;
+    }
   }
 
-  void openSlidingModal() {
-    showBarModalBottomSheet(
-      context: Get.context!,
-      builder: (context) {
-        return const CreateVoucherScreen();
-      },
-    );
+  void onSearch(String value) {
+    Get.find<VoucherController>().searchQuery.value = value;
   }
 }

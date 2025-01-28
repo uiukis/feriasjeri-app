@@ -1,7 +1,7 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 import 'dart:typed_data';
-import 'package:feriasjeri_app/models/voucher.dart';
+import 'package:feriasjeri_app/data/models/voucher.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/widgets.dart' as pw;

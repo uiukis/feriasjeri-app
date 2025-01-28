@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:feriasjeri_app/models/voucher.dart';
+import 'package:feriasjeri_app/data/models/voucher.dart';
 
 class VoucherWidget extends StatelessWidget {
   final Voucher voucher;

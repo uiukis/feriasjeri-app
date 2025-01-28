@@ -1,4 +1,4 @@
-import 'package:feriasjeri_app/views/login_screen.dart';
+import 'package:feriasjeri_app/presentation/views/login/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
@@ -80,12 +80,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 leading: const Icon(Icons.home),
                 title: const Text('Vouchers'),
               ),
-              const Spacer(),
               ListTile(
                 onTap: () {},
                 leading: const Icon(Icons.settings),
-                title: const Text('Configurações'),
+                title: const Text('Administador'),
               ),
+              const Spacer(),
               ListTile(
                 onTap: () {},
                 leading: const Icon(Icons.account_circle_rounded),
