@@ -1,7 +1,7 @@
+import 'package:feriasjeri_app/core/constants/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../home/home_screen.dart';
-import '../login/login_screen.dart';
+import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -38,13 +38,10 @@ class _SplashScreenState extends State<SplashScreen>
     await _controller.forward();
 
     FirebaseAuth.instance.authStateChanges().listen((user) {
-      if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) =>
-                user != null ? HomeScreen() : const LoginScreen(),
-          ),
-        );
+      if (user != null) {
+        Get.offAllNamed(AppRoutes.home);
+      } else {
+        Get.offAllNamed(AppRoutes.login);
       }
     });
   }

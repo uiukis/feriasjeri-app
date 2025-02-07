@@ -1,22 +1,17 @@
-import 'package:feriasjeri_app/controllers/home_controller.dart';
-import 'package:feriasjeri_app/controllers/voucher_controller.dart';
+import 'package:feriasjeri_app/presentation/controllers/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:feriasjeri_app/presentation/views/voucher/create_voucher_screen.dart';
-import 'package:feriasjeri_app/presentation/shared/components/bar_bottom_sheet.dart';
 import 'package:feriasjeri_app/presentation/shared/components/custom_drawer.dart';
 import 'package:feriasjeri_app/presentation/shared/components/custom_icon_button.dart';
 import 'package:feriasjeri_app/presentation/shared/components/custom_search_bar.dart';
 import 'package:feriasjeri_app/presentation/views/home/widgets/voucher_list.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
-
-  final controller = Get.put(HomeController());
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Get.put(VoucherController());
+    final homeController = Get.put(HomeController());
 
     final mediaQuery = MediaQuery.of(context);
     final appBarHeight = 80 + mediaQuery.padding.top;
@@ -24,7 +19,7 @@ class HomeScreen extends StatelessWidget {
         (mediaQuery.size.height - appBarHeight) / mediaQuery.size.height;
 
     return CustomDrawer(
-      drawerController: controller.advancedDrawerController,
+      drawerController: homeController.advancedDrawerController,
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: PreferredSize(
@@ -32,7 +27,7 @@ class HomeScreen extends StatelessWidget {
           child: Obx(
             () => AppBar(
               automaticallyImplyLeading: false,
-              backgroundColor: controller.appBarColor.value,
+              backgroundColor: homeController.appBarColor.value,
               toolbarHeight: appBarHeight,
               elevation: 0,
               surfaceTintColor: Colors.transparent,
@@ -41,12 +36,13 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   CustomIconButton(
                     icon: Icons.menu,
-                    onPressed: controller.handleMenuButtonPressed,
+                    onPressed: homeController.handleMenuButtonPressed,
                   ),
                   AnimatedOpacity(
                     duration: const Duration(milliseconds: 300),
-                    opacity: controller.isSearchBarExpanded.value ? 0.0 : 1.0,
-                    child: (!controller.isSearchBarExpanded.value)
+                    opacity:
+                        homeController.isSearchBarExpanded.value ? 0.0 : 1.0,
+                    child: (!homeController.isSearchBarExpanded.value)
                         ? const Text(
                             'Vouchers',
                             style: TextStyle(
@@ -59,8 +55,8 @@ class HomeScreen extends StatelessWidget {
                   ),
                   CustomSearchBar(
                     hintText: "Buscar vouchers...",
-                    onSearch: controller.onSearch,
-                    onExpand: controller.handleSearchBarExpand,
+                    onSearch: homeController.onSearch,
+                    onExpand: homeController.handleSearchBarExpand,
                   ),
                 ],
               ),
@@ -74,7 +70,7 @@ class HomeScreen extends StatelessWidget {
                 alignment: Alignment.topCenter,
                 heightFactor: 0.6,
                 child: Obx(() => AnimatedScale(
-                      scale: controller.zoomFactor.value,
+                      scale: homeController.zoomFactor.value,
                       duration: const Duration(milliseconds: 400),
                       curve: Curves.easeInOut,
                       child: Image.asset(
@@ -92,14 +88,14 @@ class HomeScreen extends StatelessWidget {
               maxChildSize: maxModalHeightFactor,
               builder: (context, scrollController) {
                 scrollController.addListener(() {
-                  controller.updateOffset(scrollController.offset);
+                  homeController.updateOffset(scrollController.offset);
                 });
 
                 return Obx(() => AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       decoration: BoxDecoration(
                         color: Colors.grey.shade300,
-                        borderRadius: controller.modalBorderRadius.value,
+                        borderRadius: homeController.modalBorderRadius.value,
                       ),
                       child: VoucherList(
                         scrollController: scrollController,
@@ -110,12 +106,10 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => showBarModalBottomSheet(
-            context: context,
-            builder: (context) => const CreateVoucherScreen(),
-          ),
-          child: const Icon(Icons.add),
+        floatingActionButton: FloatingActionButton.extended(
+          icon: const Icon(Icons.add),
+          label: const Text("Novo voucher"),
+          onPressed: homeController.showVoucherModal,
         ),
       ),
     );

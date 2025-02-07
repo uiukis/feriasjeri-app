@@ -1,9 +1,9 @@
-import 'package:feriasjeri_app/controllers/voucher_controller.dart';
+import 'package:feriasjeri_app/core/constants/app_routes.dart';
+import 'package:feriasjeri_app/presentation/controllers/voucher_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:feriasjeri_app/data/models/voucher.dart';
 import 'package:feriasjeri_app/presentation/shared/components/expandable_card.dart';
-import 'package:feriasjeri_app/presentation/views/voucher/voucher_screen.dart';
 import 'package:intl/intl.dart';
 
 class VoucherList extends StatelessWidget {
@@ -71,13 +71,8 @@ class _VoucherCard extends StatelessWidget {
     return 300;
   }
 
-  void navigateToVoucherScreen(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => VoucherScreen(voucher: voucher),
-      ),
-    );
+  void navigateToVoucherScreen() {
+    Get.toNamed(AppRoutes.voucher, arguments: voucher);
   }
 
   Widget subtitleDisplay(IconData icon, String text) {
@@ -201,7 +196,9 @@ class _VoucherCard extends StatelessWidget {
             label: const Text(
               "Visualizar voucher",
             ),
-            onPressed: () => navigateToVoucherScreen(context),
+            onPressed: () {
+              navigateToVoucherScreen();
+            },
           )
         ],
       ),

@@ -1,4 +1,7 @@
-import 'package:feriasjeri_app/controllers/voucher_controller.dart';
+import 'package:feriasjeri_app/presentation/controllers/create_voucher_controller.dart';
+import 'package:feriasjeri_app/presentation/controllers/voucher_controller.dart';
+import 'package:feriasjeri_app/presentation/shared/components/custom_modal_bottom_sheet.dart';
+import 'package:feriasjeri_app/presentation/views/voucher/new_create_voucher_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:get/get.dart';
@@ -60,5 +63,14 @@ class HomeController extends GetxController {
 
   void onSearch(String value) {
     Get.find<VoucherController>().searchQuery.value = value;
+  }
+
+  void showVoucherModal() {
+    CustomModalBottomSheet(
+      child: CreateVoucherScreen(),
+      onDismissed: () {
+        Get.delete<CreateVoucherController>();
+      },
+    );
   }
 }

@@ -14,6 +14,7 @@ class Voucher {
   final double? boardingValue;
   final double totalValue;
   final String? obs;
+  final String? createdBy;
 
   Voucher({
     required this.tour,
@@ -29,6 +30,7 @@ class Voucher {
     this.boardingValue,
     required this.totalValue,
     this.obs,
+    this.createdBy,
   });
 
   factory Voucher.fromJson(Map<String, dynamic> json) {
@@ -46,6 +48,7 @@ class Voucher {
       boardingValue: json['boardingValue'] ?? 0.0,
       totalValue: json['totalValue'],
       obs: json['obs'],
+      createdBy: json['createdBy'],
     );
   }
 
@@ -64,6 +67,7 @@ class Voucher {
       'boardingValue': boardingValue,
       'totalValue': totalValue,
       'obs': obs,
+      'createdBy': createdBy,
     };
   }
 }

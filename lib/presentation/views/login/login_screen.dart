@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:feriasjeri_app/core/constants/app_routes.dart';
 import 'package:feriasjeri_app/core/utils/validators.dart';
-import 'package:feriasjeri_app/presentation/views/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -85,9 +86,7 @@ class LoginScreen extends StatelessWidget {
         recoverPasswordSuccess: 'E-mail de recuperação enviado com sucesso',
       ),
       onSubmitAnimationCompleted: () {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
+        Get.offAllNamed(AppRoutes.home);
       },
     );
   }

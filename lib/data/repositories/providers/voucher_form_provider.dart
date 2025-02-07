@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:feriasjeri_app/data/repositories/services/voucher_service.dart';
+import 'package:feriasjeri_app/data/repositories/voucher_repository.dart';
 import 'package:feriasjeri_app/data/models/voucher.dart';
 
 class VoucherFormProvider with ChangeNotifier {
@@ -19,6 +19,8 @@ class VoucherFormProvider with ChangeNotifier {
   late DateTime startDate;
   late DateTime endDate;
 
+  final VoucherRepository voucherRepository = VoucherRepository();
+
   bool isLoading = false;
 
   String? tourError,
@@ -28,8 +30,6 @@ class VoucherFormProvider with ChangeNotifier {
       timeError,
       adultError,
       partialValueError;
-
-  final VoucherService _voucherService = VoucherService();
 
   void initForm() {
     startDate = DateTime.now();
@@ -139,7 +139,7 @@ class VoucherFormProvider with ChangeNotifier {
         obs: obsController.text.isEmpty ? "" : obsController.text,
       );
 
-      await _voucherService.saveVoucher(voucher);
+      await voucherRepository.saveVoucher(voucher);
       await Future.delayed(const Duration(seconds: 2));
       // ignore: use_build_context_synchronously
       Navigator.pop(context);

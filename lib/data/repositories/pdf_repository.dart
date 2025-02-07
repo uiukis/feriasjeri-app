@@ -1,12 +1,11 @@
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
 import 'dart:typed_data';
 import 'package:feriasjeri_app/data/models/voucher.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
-class PdfService {
+class PdfRepository {
   final DateFormat dateFormatter = DateFormat('dd/MM/yyyy');
 
   Future<Uint8List> generatePdf(Voucher voucher) async {
@@ -127,16 +126,7 @@ class PdfService {
   Future<void> downloadPdf(Voucher voucher) async {
     try {
       final pdfBytes = await generatePdf(voucher);
-
-      final blob = html.Blob([pdfBytes]);
-      final url = html.Url.createObjectUrlFromBlob(blob);
-
-      html.AnchorElement(href: url)
-        ..target = 'blank'
-        ..download = 'voucher.pdf'
-        ..click();
-
-      html.Url.revokeObjectUrl(url);
+      await Printing.sharePdf(bytes: pdfBytes, filename: 'voucher.pdf');
     } catch (e) {
       throw Exception('Erro ao salvar o PDF: $e');
     }

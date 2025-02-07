@@ -45,6 +45,8 @@ class CustomClickableTile extends StatelessWidget {
                 : null,
             title: Text(
               text,
+              textAlign:
+                  prefixIcon == null ? TextAlign.center : TextAlign.start,
               style: TextStyle(
                 fontSize: 16,
                 color: hasError ? Colors.red : Colors.black,

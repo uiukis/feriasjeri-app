@@ -1,18 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feriasjeri_app/data/models/voucher.dart';
-import 'package:feriasjeri_app/data/repositories/services/user_service.dart';
+import 'package:feriasjeri_app/data/repositories/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class VoucherService {
+class VoucherRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final userId = FirebaseAuth.instance.currentUser?.uid;
+
+  final UserRepository userRepository = UserRepository();
 
   Future<void> saveVoucher(Voucher voucher) async {
     try {
       if (userId != null) {
         await _firestore.collection('vouchers').add({
           ...voucher.toJson(),
-          'userId': userId,
+          'createdBy': userId,
         });
       } else {
         throw Exception('Usuário não autenticado');
@@ -23,9 +25,7 @@ class VoucherService {
   }
 
   Future<List<Voucher>> fetchVouchers() async {
-    final UserService userService = UserService();
-
-    bool isAdmin = await userService.checkUserAdmin();
+    bool isAdmin = await userRepository.checkUserAdmin();
 
     if (isAdmin) {
       final snapshot = await _firestore

@@ -1,14 +1,18 @@
-import 'package:feriasjeri_app/data/repositories/providers/pdf_provider.dart';
+import 'package:feriasjeri_app/core/constants/app_pages.dart';
+import 'package:feriasjeri_app/core/constants/app_routes.dart';
 import 'package:feriasjeri_app/data/repositories/providers/voucher_form_provider.dart';
 import 'package:feriasjeri_app/presentation/views/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+import 'package:get/get.dart';
 import 'firebase_options.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+  usePathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
   await Firebase.initializeApp(
@@ -19,7 +23,6 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => VoucherFormProvider()),
-        ChangeNotifierProvider(create: (_) => PdfProvider()),
       ],
       child: const MyApp(),
     ),
@@ -31,8 +34,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Ferias Jeri',
+      navigatorKey: Get.key,
+      initialRoute: AppRoutes.splash,
+      getPages: AppPages.routes,
+      defaultTransition: Transition.fade,
+      opaqueRoute: true,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.blue,

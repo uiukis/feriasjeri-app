@@ -1,7 +1,7 @@
 import 'package:feriasjeri_app/data/repositories/providers/voucher_form_provider.dart';
 import 'package:feriasjeri_app/presentation/shared/components/animated_screen.dart';
-import 'package:feriasjeri_app/presentation/shared/components/custom_date_picker_dialog.dart';
 import 'package:feriasjeri_app/presentation/shared/components/custom_clickable_tile.dart';
+import 'package:feriasjeri_app/presentation/shared/components/custom_date_picker.dart';
 import 'package:feriasjeri_app/presentation/shared/components/custom_input_field.dart';
 import 'package:feriasjeri_app/presentation/shared/components/floating_modal.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +26,7 @@ class _CreateVoucherScreenState extends State<CreateVoucherScreen> {
       final selectedDates = await showFloatingModalBottomSheet<List<DateTime?>>(
         context: context,
         builder: (BuildContext context) {
-          return CustomDatePickerDialog(
+          return CustomDatePicker(
             startDate: formProvider.startDate,
             endDate: formProvider.endDate,
           );
@@ -110,7 +110,7 @@ class _CreateVoucherScreenState extends State<CreateVoucherScreen> {
                                 controller: formProvider.tourController,
                                 label: 'Passeio',
                                 prefixIcon: Icons.explore,
-                                errorText: formProvider.tourError,
+                                // errorText: formProvider.tourError,
                               ),
                             ),
                             ListTile(
@@ -134,7 +134,7 @@ class _CreateVoucherScreenState extends State<CreateVoucherScreen> {
                                       onTap: () => _showSelectTime(context),
                                       prefixIcon: Icons.access_time,
                                       text: formattedTime,
-                                      errorText: formProvider.timeError,
+                                      // errorText: formProvider.timeError,
                                     ),
                                   ),
                                 ],
@@ -145,7 +145,7 @@ class _CreateVoucherScreenState extends State<CreateVoucherScreen> {
                                 controller: formProvider.nameController,
                                 label: 'Nome',
                                 prefixIcon: Icons.person,
-                                errorText: formProvider.nameError,
+                                // errorText: formProvider.nameError,
                               ),
                             ),
                             ListTile(
@@ -154,7 +154,7 @@ class _CreateVoucherScreenState extends State<CreateVoucherScreen> {
                                 label: 'Telefone',
                                 keyboardType: TextInputType.phone,
                                 prefixIcon: Icons.phone,
-                                errorText: formProvider.phoneError,
+                                // errorText: formProvider.phoneError,
                               ),
                             ),
                             ListTile(
@@ -167,7 +167,7 @@ class _CreateVoucherScreenState extends State<CreateVoucherScreen> {
                                           formProvider.boardingController,
                                       label: 'Embarque',
                                       prefixIcon: Icons.place,
-                                      errorText: formProvider.boardingError,
+                                      // errorText: formProvider.boardingError,
                                     ),
                                   ),
                                   const SizedBox(
@@ -185,7 +185,7 @@ class _CreateVoucherScreenState extends State<CreateVoucherScreen> {
                                       label: 'Adultos',
                                       prefixIcon: Icons.group,
                                       keyboardType: TextInputType.number,
-                                      errorText: formProvider.adultError,
+                                      // errorText: formProvider.adultError,
                                     ),
                                   ),
                                   const SizedBox(
@@ -215,7 +215,7 @@ class _CreateVoucherScreenState extends State<CreateVoucherScreen> {
                                           const TextInputType.numberWithOptions(
                                         decimal: true,
                                       ),
-                                      errorText: formProvider.partialValueError,
+                                      // errorText: formProvider.partialValueError,
                                     ),
                                   ),
                                   const SizedBox(

@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feriasjeri_app/data/models/voucher.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class VoucherUtils {
   static Future<void> generateSampleVouchers() async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final userId = FirebaseAuth.instance.currentUser?.uid;
 
     List<Voucher> vouchers = [
       Voucher(
@@ -23,6 +25,7 @@ class VoucherUtils {
         boardingValue: 10.0,
         totalValue: 110.0,
         obs: 'Voucher de teste',
+        createdBy: userId,
       ),
       Voucher(
         tour: 'Passeio no parque',
@@ -40,6 +43,7 @@ class VoucherUtils {
         boardingValue: 5.0,
         totalValue: 90.0,
         obs: 'Voucher de teste adicional',
+        createdBy: userId,
       ),
       Voucher(
         tour: 'Passeio de barco',
@@ -57,6 +61,7 @@ class VoucherUtils {
         boardingValue: 15.0,
         totalValue: 135.0,
         obs: 'Voucher exclusivo',
+        createdBy: userId,
       ),
       Voucher(
         tour: 'Tour gastronômico',
@@ -74,6 +79,7 @@ class VoucherUtils {
         boardingValue: 0.0,
         totalValue: 150.0,
         obs: 'Voucher de jantar',
+        createdBy: userId,
       ),
       Voucher(
         tour: 'Passeio cultural',
@@ -91,6 +97,7 @@ class VoucherUtils {
         boardingValue: 10.0,
         totalValue: 85.0,
         obs: 'Voucher com visita guiada',
+        createdBy: userId,
       ),
       Voucher(
         tour: 'Aventura no parque',
@@ -108,6 +115,7 @@ class VoucherUtils {
         boardingValue: 0.0,
         totalValue: 200.0,
         obs: 'Voucher de aventura familiar',
+        createdBy: userId,
       ),
       Voucher(
         tour: 'Expedição na floresta',
@@ -125,6 +133,7 @@ class VoucherUtils {
         boardingValue: 20.0,
         totalValue: 200.0,
         obs: 'Voucher para expedição com guia',
+        createdBy: userId,
       ),
       Voucher(
         tour: 'Visita ao zoológico',
@@ -142,6 +151,7 @@ class VoucherUtils {
         boardingValue: 5.0,
         totalValue: 55.0,
         obs: 'Voucher para entrada com acompanhante',
+        createdBy: userId,
       ),
       Voucher(
         tour: 'Passeio em parque aquático',

@@ -1,18 +1,18 @@
+import 'package:feriasjeri_app/presentation/controllers/voucher_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:feriasjeri_app/presentation/shared/components/custom_icon_button.dart';
 import 'package:feriasjeri_app/presentation/views/voucher/widgets/voucher_widget.dart';
 import 'package:feriasjeri_app/data/models/voucher.dart';
-import 'package:provider/provider.dart';
-import 'package:feriasjeri_app/data/repositories/providers/pdf_provider.dart';
+import 'package:get/get.dart';
 
 class VoucherScreen extends StatelessWidget {
-  final Voucher voucher;
-
-  const VoucherScreen({super.key, required this.voucher});
+  const VoucherScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final pdfNotifier = Provider.of<PdfProvider>(context);
+    final Voucher voucher = Get.arguments as Voucher;
+
+    final VoucherController voucherController = Get.put(VoucherController());
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -40,10 +40,17 @@ class VoucherScreen extends StatelessWidget {
             ),
             Row(
               children: [
-                CustomIconButton(
-                  icon: Icons.share,
-                  onPressed: () => pdfNotifier.generatePdf(voucher),
-                ),
+                Obx(() {
+                  return voucherController.isLoading.value
+                      ? const CircularProgressIndicator()
+                      : CustomIconButton(
+                          icon: Icons.share,
+                          onPressed: () {
+                            voucherController
+                                .generateAndDownloadVoucherPdf(voucher);
+                          },
+                        );
+                }),
               ],
             ),
           ],
@@ -65,20 +72,27 @@ class VoucherScreen extends StatelessWidget {
                   horizontal: 8,
                   vertical: 16,
                 ),
-                child: ElevatedButton.icon(
-                  onPressed: () => pdfNotifier.generatePdf(voucher),
-                  icon: const Icon(Icons.download),
-                  label: const Text("Download"),
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(
-                      double.infinity,
-                      48,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
+                child: Obx(() {
+                  return voucherController.isLoading.value
+                      ? const CircularProgressIndicator()
+                      : ElevatedButton.icon(
+                          onPressed: () {
+                            voucherController
+                                .generateAndDownloadVoucherPdf(voucher);
+                          },
+                          icon: const Icon(Icons.download),
+                          label: const Text("Download"),
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(
+                              double.infinity,
+                              48,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        );
+                }),
               ),
             ],
           ),
