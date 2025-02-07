@@ -40,7 +40,6 @@ dependencies:
   get: ^4.6.6
   animations: ^2.0.11
   flutter_advanced_drawer: ^1.3.7
-  flutter_dotenv: ^5.2.1
   printing: ^5.14.0
   easy_mask: ^2.0.1
 
@@ -55,4 +54,3 @@ flutter:
 
   assets:
     - assets/images/background.jpg # Adiciona imagem usada no projeto
-    - assets/.env # ENV do projeto

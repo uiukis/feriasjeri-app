@@ -4,7 +4,6 @@ import 'package:feriasjeri_app/data/repositories/providers/voucher_form_provider
 import 'package:feriasjeri_app/presentation/views/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:get/get.dart';
 import 'firebase_options.dart';
@@ -14,7 +13,6 @@ import 'package:provider/provider.dart';
 void main() async {
   usePathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
